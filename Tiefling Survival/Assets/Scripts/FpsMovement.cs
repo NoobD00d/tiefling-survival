@@ -78,12 +78,23 @@ public class FpsMovement : MonoBehaviour
 
     private void Crouch(InputAction.CallbackContext context) {
         if (isCrouching) {
+            if(!canStand()) {
+                return;
+            }
             targetHeight = standingHeight;
         } else {
             targetHeight = crouchHeight;
         }
 
         isCrouching = !isCrouching;
+    }
+
+    private bool canStand(){
+        return !Physics.CapsuleCast(
+            transform.position + characterController.center, 
+            transform.position + (Vector3.up * characterController.height / 2), 
+            characterController.radius,
+            Vector3.up);
     }
 
     private void Run(InputAction.CallbackContext context) {
